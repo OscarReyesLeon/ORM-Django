@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.fields import IntegerField
 
 # Create your models here.
 
@@ -62,3 +63,31 @@ class Animal(ModeloAuditoria):
 
     class Meta:
         verbose_name_plural = "Animales"
+
+class Libro(ModeloAuditoria):
+    nombre = models.CharField(max_length=50)
+    precio = models.FloatField(default=1,help_text=" en dolares")
+    peso = models.PositiveIntegerField(help_text=" en kilos")
+    VIRTUAL = 'Virtual'
+    FISICO = 'Fisico'
+    TIPO_OPCIONES = [
+        (VIRTUAL,'Virtual'),
+        (FISICO, 'Fisico'),
+    ]
+    tipo = models.CharField(
+        max_length=7,
+        choices=TIPO_OPCIONES,
+        default=FISICO,
+    )
+    url_download = models.URLField(default=None)
+
+    def __str__(self):
+        return "{}[{}]".format(self.nombre,self.Tipo)
+    
+    def save(self):
+        self.nombre = self.nombre.upper()
+        super(Libro,self).save()
+
+    class Meta:
+        verbose_name_plural = "libros",
+        unique_together = ('nombre','tipo')
