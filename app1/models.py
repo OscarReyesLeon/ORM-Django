@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 from django.db.models.fields import IntegerField
 
@@ -38,6 +39,18 @@ class Persona(ModeloAuditoria):
     )
     apellido = models.CharField(max_length=50)
     fecha_nacimiento = models.DateTimeField(null=False,blank=False)
+
+    @property
+    def edad(self):
+        today = date.today()
+        age = today.year - self.fecha_nacimiento.year - \
+            ((today.month, today.day) < \
+                (self.fecha_nacimiento.month, self.fecha_nacimiento.day))
+        return age
+
+    @property
+    def nombre_completo(self):
+        return "{} {}".format(self.nombre,self.apellido)
 
     def __str__(self):
         return "{} {}".format(self.nombre,self.apellido)
