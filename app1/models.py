@@ -1,6 +1,7 @@
 from datetime import date
 from django.db import models
-from django.db.models.fields import IntegerField
+from django.db.models.deletion import PROTECT
+from django.db.models.fields import CharField, IntegerField
 
 # Create your models here.
 
@@ -113,3 +114,17 @@ class Progenitor(ModeloAuditoria):
         return "{} - {} - {}".format(self.persona,self.madre,self.padre)
     class Meta:
         verbose_name = "Progenitores"
+
+class Padre(models.Model):
+    nombre = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.nombre
+
+class Hijo(models.Model):
+    padre = models.ForeignKey(Padre,on_delete=PROTECT)
+    nombre = CharField(max_length=50)
+
+    def __str__(self):
+        return "{} hijo de {}".format(self.nombre,self.padre)
+        
