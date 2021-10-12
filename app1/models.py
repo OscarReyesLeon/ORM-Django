@@ -140,3 +140,22 @@ class Articulo(models.Model):
 
     def __str__(self):
         return self.titular
+
+class Empleado(models.Model):
+    nombre = models.CharField(max_length=100)
+    supervisor = models.ForeignKey(
+        'self',null=True,on_delete=models.SET_NULL
+    )
+
+    def __str__(self):
+        return self.nombre
+
+class Employ(models.Model):
+    nombre = models.CharField(max_length=100)
+    supervisor = models.ForeignKey(
+        'app1.Employ',null=True,on_delete=models.DO_NOTHING
+    )
+
+    def __str__(self):
+        return self.nombre
+
